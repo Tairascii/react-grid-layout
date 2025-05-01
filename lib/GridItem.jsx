@@ -101,6 +101,8 @@ type Props = {
   resizeHandles?: ResizeHandleAxis[],
   resizeHandle?: ResizeHandle,
 
+  dragW: number,
+  dragH: number,
   onDrag?: GridItemCallback<GridDragEvent>,
   onDragStart?: GridItemCallback<GridDragEvent>,
   onDragStop?: GridItemCallback<GridDragEvent>,
@@ -117,6 +119,8 @@ type DefaultProps = {
   minW: number,
   maxH: number,
   maxW: number,
+  dragW: number,
+  dragH: number,
   transformScale: number
 };
 
@@ -218,6 +222,8 @@ export default class GridItem extends React.Component<Props, State> {
     minW: 1,
     maxH: Infinity,
     maxW: Infinity,
+    dragW: 1,
+    dragH: 1,
     transformScale: 1
   };
 
@@ -345,6 +351,20 @@ export default class GridItem extends React.Component<Props, State> {
       }
     }
 
+    if (this.state.dragging) {
+      const { x, y, dragW, dragH } = this.props;
+
+      const pos = calcGridItemPosition(
+        this.getPositionParams(),
+        x,
+        y,
+        dragW,
+        dragH,
+        this.state
+      );
+      style.width = pos.width;
+      style.height = pos.height;
+    }
     return style;
   }
 

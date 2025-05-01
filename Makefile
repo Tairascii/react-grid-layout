@@ -89,3 +89,17 @@ define release
 	git tag "$$NEXT_VERSION" -m "release $$NEXT_VERSION"
 	npm pack --dry-run
 endef
+
+release-git: build lint
+	BRANCH=$(git branch --show-current)
+	git rm -rf --cached .
+	git add -f $(DIST) $(CSS) $(BUILD) $(LIB)
+	git add -f Makefile package.json README.md LICENSE CHANGELOG.md index.js index.js.flow .prettierrc .prettierignore .flowconfig .eslintignore .browserslistrc .babelrc.js
+	git branch -D ${VERSION}
+	git checkout -b ${VERSION}
+	git commit -m "Release $(VERSION)"
+	git push -uf origin ${VERSION}
+	git checkout ${BRANCH} -f
+	git rm -rf --cached .
+	git add .
+	
