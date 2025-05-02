@@ -148,7 +148,7 @@ function generateLayout(resizeHandles) {
       w: 2,
       h: y,
       i: i.toString(),
-      static: Math.random() < 0.05,
+      static: false,
       resizeHandles
     };
   });
